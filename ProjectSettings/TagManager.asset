@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Bullet
+  - enemy
+  - attack
+  - skill
+  - ally_player
+  - FxTemporaire
+  - mon_card
+  - pos1
+  - pos2
+  - pos3
+  - ally_mon1
+  - ally_mon2
+  - ally_mon3
+  - opp_mon
+  - opp_player
+  - opp_mon1
+  - opp_mon2
+  - opp_mon3
+  - skill_player
+  - myicon
+  - oppicon
+  - attack_player
+  - attack_0
+  - attack_3
+  - attack_2
+  - skill_2
+  - skill_0
+  - mon_card4
+  - attack_2player
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
