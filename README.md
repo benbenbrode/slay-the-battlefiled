@@ -21,7 +21,7 @@
 
 주요 활용 기술
 ---
-* #01) 포톤 네트워크를 이용한 랜덤매칭 시스템 구현
+#01) 포톤 네트워크를 이용한 랜덤매칭 시스템 구현
 <details>
 <summary>예시 코드</summary>
   
@@ -178,7 +178,7 @@ public class Network : MonoBehaviourPunCallbacks
 ```
 
 </details>
-* #02) 카드의 개수에 따른 시작 각도와 회전 각도 계산하여 부채꼴로 카드 정렬
+#02) 카드의 개수에 따른 시작 각도와 회전 각도 계산하여 부채꼴로 카드 정렬
 <details>
 <summary>예시 코드</summary>
   
