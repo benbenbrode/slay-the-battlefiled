@@ -183,6 +183,7 @@ public class Network : MonoBehaviourPunCallbacks
 <summary>예시 코드</summary>
   
 ```csharp
+
     public void ArrangeCardsInFanShape(GameObject[] cards)
     {
         int cardCount = cards.Length;
@@ -219,6 +220,61 @@ public class Network : MonoBehaviourPunCallbacks
         }
     }
 
+```
+
+</details>
+
+#03) 현재 코스트에 따라서 카드 드래그
+<details>
+<summary>예시 코드</summary>
+  
+```csharp
+
+ 작성예정
+```
+
+</details>
+
+#04) 태그로 적합한 대상인지 확인후 카드를 효과를 적용할 배열로 이동
+<details>
+<summary>예시 코드</summary>
+  
+```csharp
+
+ 작성예정
+```
+
+</details>
+
+#05) 배열에 있는 카드를 순서대로 지우며 효과 적용
+<details>
+<summary>예시 코드</summary>
+  
+```csharp
+
+ 작성예정
+```
+
+</details>
+
+#06) 삭제시 효과 적용
+<details>
+<summary>예시 코드</summary>
+  
+```csharp
+
+ 작성예정
+```
+
+</details>
+
+#07) 이펙트 예시
+<details>
+<summary>예시 코드</summary>
+  
+```csharp
+
+ 작성예정
 ```
 
 </details>
