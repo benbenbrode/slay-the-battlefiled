@@ -1,5 +1,5 @@
 # slay-the-battlefiled
-===
+
 
 게임 장르 : 2D 턴제 카드게임
 ---
