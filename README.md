@@ -33,9 +33,9 @@ using UnityEngine.SceneManagement;
 public class Network : MonoBehaviourPunCallbacks
 {
     public static Network Instance;
-    public int type = 0;
-    public int type2 = 0;
-    public List<string> deck;
+    public int type = 0; // 내 직업
+    public int type2 = 0; // 상대 직업
+    public List<string> deck; // 내 덱
 
     private void Awake()
     {
