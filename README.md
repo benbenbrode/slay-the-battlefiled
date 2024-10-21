@@ -183,7 +183,41 @@ public class Network : MonoBehaviourPunCallbacks
 <summary>예시 코드</summary>
   
 ```csharp
-카드의 개수에 따른 시작 각도와 회전 각도 계산:
+    public void ArrangeCardsInFanShape(GameObject[] cards)
+    {
+        int cardCount = cards.Length;
+        float startAngle = -(angleRange * cardCount) / 2f;
+        float angleStep = (angleRange * cardCount) / (cardCount - 1);
+        if (cards.Length == 1) // 패가 한장일때
+        {
+            cards[0].transform.localRotation = Quaternion.Euler(0, 0, -90);
+            handpos.transform.position = new Vector3(5f, handpos.transform.position.y, handpos.transform.position.z);
+        }
+        else if (cards.Length > 1)
+        {
+            for (int i = 0; i < cardCount; i++)
+            {
+                float angle = startAngle + angleStep * i;
+                Vector3 direction = Quaternion.Euler(0, 0, angle) * Vector3.right;
+                Vector3 cardPosition = handposTr.position + direction * radius;
+
+                // 카드를 hostPos 기준으로 위치를 설정합니다.
+                cards[i].transform.localPosition = direction * (radius * cardCount);
+
+                // 카드 회전 조정
+                cards[i].transform.localRotation = Quaternion.Euler(0, 0, angle - 90);
+            }
+
+            if (cards.Length == 2) // 패가 2장일때
+                handpos.transform.position = new Vector3(handpos.transform.position.x, -6.6f, handpos.transform.position.z);
+            if (cards.Length == 3) // 패가 3장일때
+                handpos.transform.position = new Vector3(handpos.transform.position.x, -7.9f, handpos.transform.position.z);
+            if (cards.Length == 4) // 패가 4장일때
+                handpos.transform.position = new Vector3(handpos.transform.position.x, -9.2f, handpos.transform.position.z);
+            if (cards.Length == 5) // 패가 5장일때
+                handpos.transform.position = new Vector3(handpos.transform.position.x, -10.5f, handpos.transform.position.z);
+        }
+    }
 
 ```
 
