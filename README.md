@@ -433,8 +433,8 @@ public class Network : MonoBehaviourPunCallbacks
 #10) 스크롤뷰로 덱구축 구현
 <details>
 <summary>예시코드</summary>
+  
 ```csharp
-
     public void OnClick()
     {
         ScrollRect parentScrollView = GetComponentInParent<ScrollRect>();
@@ -507,5 +507,8 @@ public class Network : MonoBehaviourPunCallbacks
         }
     }
 ```
+
+![TEST_1 2024-10-22 18-06-18 (1)](https://github.com/user-attachments/assets/3bbfaaa8-48b5-465d-8a51-da2bd6b04912)
+
 </details>
 
