@@ -274,7 +274,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#05) OnPointerEnter와 OnPointerExit 메서드를 사용하여 마우스 커서가 올라간 카드가 확대되고 가장 앞에 위치, 커서가 내려가면 기존의 상태로 돌아감
+#05) OnPointerEnter와 OnPointerExit를 사용하여 마우스 커서가 따른 기능 추가
 <details>
 <summary>예시 코드</summary>
   
@@ -415,5 +415,100 @@ public class Network : MonoBehaviourPunCallbacks
 ![TEST_1 2024-10-22 17-51-38](https://github.com/user-attachments/assets/bd958188-8d79-4e41-9857-0a64dd7e4c3c)
 
 몬스터는 채력과 방어력을 가지고 있으며 마우스 커서를 올릴시 효과창 활성화
+</details>
+
+#09) 스폰 카드로 몬스터 객체를 생성하여 전투 보조
+<details>
+<summary>예시</summary>
+  
+![TEST_1 2024-10-22 17-34-43](https://github.com/user-attachments/assets/5f7eb1c7-f9f6-4635-acf4-b94a7e9d6792)
+
+3개의 몬스터 존이 존재, 몬스터 카드 드래그시 몬스터존 활성화, 소환된 몬스터가 파괴될때까지 그 몬스터존 비활성화, 엔드페이즈에 소환된 몬스터들의 효과 적용 
+
+![TEST_1 2024-10-22 17-51-38](https://github.com/user-attachments/assets/bd958188-8d79-4e41-9857-0a64dd7e4c3c)
+
+몬스터는 채력과 방어력을 가지고 있으며 마우스 커서를 올릴시 효과창 활성화
+</details>
+
+#10) 스크롤뷰로 덱구축 구현
+<details>
+<summary>예시코드</summary>
+```csharp
+
+    public void OnClick()
+    {
+        ScrollRect parentScrollView = GetComponentInParent<ScrollRect>();
+
+        if (parentScrollView.name == "bag")
+        {
+            if (mgr.GetComponent<scrollbtn>().maincker == 0)
+            {
+                // 현재 Scroll View의 콘텐츠가 30개 이상인지 확인
+                if (targetScrollView.content.childCount >= 30)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(1);
+                    return;
+                }
+
+                int count = 0;
+                foreach (Transform child in targetScrollView.content)
+                {
+                    if (child.name == prefab.name)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count >= 3)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(2);
+                  
+                    return;
+                }
+
+                // 새로운 프리팹을 특정 Scroll View의 Content에 추가합니다.
+                GameObject newItem = Instantiate(prefab, targetScrollView.content);
+                newItem.transform.localScale = Vector3.one;
+                newItem.name = prefab.name;
+            }
+            else if(mgr.GetComponent<scrollbtn>().maincker == 1)
+            {
+                // 현재 Scroll View의 콘텐츠가 30개 이상인지 확인
+                if (targetScrollView2.content.childCount >= 30)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(1);
+                    return;
+                }
+
+                int count = 0;
+                foreach (Transform child in targetScrollView2.content)
+                {
+                    if (child.name == prefab.name)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count >= 3)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(2);
+                    return;
+                }
+
+                // 새로운 프리팹을 특정 Scroll View의 Content에 추가합니다.
+                GameObject newItem = Instantiate(prefab, targetScrollView2.content);
+                newItem.transform.localScale = Vector3.one;
+                newItem.name = prefab.name;
+            }
+        }
+        else if (parentScrollView.name == "deck" || parentScrollView.name == "deck2")
+        {
+            Destroy(gameObject);
+        }
+    }
+```
+  
+  ![TEST_1 2024-10-22 18-06-18](https://github.com/user-attachments/assets/0dbffcf7-b886-4eec-a7a9-2a24d3f4a002)
+
 </details>
 
