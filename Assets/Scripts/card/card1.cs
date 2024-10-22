@@ -16,6 +16,7 @@ public class card1 : MonoBehaviour
     public GameObject opp;
     private Transform effTransform;
     private Transform effTransform2;
+
     private void Start()
     {
         battle = GameObject.Find("battlemgr");

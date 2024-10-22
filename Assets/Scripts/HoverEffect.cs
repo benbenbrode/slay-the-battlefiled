@@ -19,6 +19,8 @@ public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 마우스 커서를 올렸을 때 실행되는 함수
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (gameObject.GetComponent<CardCtrl>().viewcker == true)
+            return;
         // 이미지 크기를 확대
         rectTransform.localScale = originalScale * scaleFactor;
 
@@ -30,6 +32,8 @@ public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 마우스 커서가 이미지에서 벗어났을 때 실행되는 함수
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (gameObject.GetComponent<CardCtrl>().viewcker == true)
+            return;
         // 이미지 크기를 원래대로 되돌림
         rectTransform.localScale = originalScale;
 

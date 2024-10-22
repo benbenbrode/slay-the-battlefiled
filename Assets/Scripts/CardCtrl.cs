@@ -15,7 +15,8 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public GameObject dropTarget; // 드랍된 타켓
 
-    private bool activeck = true;
+    private bool activeck = true; // 올바른 타켓 확인용
+    public bool viewcker = false; // 강조때 드래그 막기
 
     public int Cost = 0; // 카드 코스트
     public GameObject canvans;
@@ -50,6 +51,9 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             return;
         }
 
+        if (viewcker == true)
+            return;
+
         originalPosition = transform.position;
         // 드래그 시작 시 각도값을 0으로 초기화
         transform.rotation = Quaternion.identity;
@@ -72,6 +76,8 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             return;
         }
 
+        if (viewcker == true)
+            return;
         // 마우스 좌표를 월드 좌표로 변환 (Camera 모드에서)
         Vector2 screenPoint = eventData.position;  // 마우스의 화면 좌표
         Vector3 worldPoint;
@@ -122,6 +128,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 if (dropTarget.GetComponent<PlayerState>() != null)
@@ -143,6 +150,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             {
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 if (dropTarget.GetComponent<PlayerState>() != null)
@@ -164,6 +172,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             {
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 me.GetComponent<PlayerState>().cost -= 3;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
@@ -188,6 +197,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 2;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -204,6 +214,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -218,6 +229,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 if (dropTarget.GetComponent<PlayerState>() != null)
@@ -240,6 +252,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             {
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 if (dropTarget.GetComponent<PlayerState>() != null)
@@ -263,6 +276,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 2;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 if (dropTarget.GetComponent<PlayerState>() != null)
@@ -286,6 +300,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -300,6 +315,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -314,6 +330,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -328,6 +345,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 1;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -349,6 +367,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 4;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -363,6 +382,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 4;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
@@ -377,6 +397,7 @@ public class CardCtrl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 me.GetComponent<PlayerState>().cost -= 4;
                 transform.Translate(1000f, 0f, 0f);
                 activeck = false;
+                viewcker = true;
                 mgr.GetComponent<CardMgr>().RemoveCard(gameObject);
                 battlemgr battleManager = FindObjectOfType<battlemgr>();
                 gameObject.GetComponent<Target>().drop = dropTarget.name;
