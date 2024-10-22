@@ -228,11 +228,7 @@ public class Network : MonoBehaviourPunCallbacks
 <details>
 <summary>예시 코드</summary>
   
-```csharp
-
- 작성예정
-```
-
+![TEST_1 2024-10-22 16-12-17](https://github.com/user-attachments/assets/00178606-f064-4e67-97fc-2d66a355ba97)
 </details>
 
 #04) 태그로 적합한 대상인지 확인후 카드를 효과를 적용할 배열로 이동
