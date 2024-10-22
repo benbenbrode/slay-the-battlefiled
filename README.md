@@ -224,7 +224,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#03) 현재 코스트에 따라서 카드 드래그
+#03) 현재 코스트에 따라서 카드 드래그(사용 가능한 카드는 테두리를 초록색으로 표시)
 <details>
 <summary>예시</summary>
   
@@ -309,18 +309,96 @@ public class Network : MonoBehaviourPunCallbacks
   
 ```csharp
 
- 작성예정
+  void OnDestroy()
+ {
+     if (gameObject.GetComponent<Target>().drop == "opp_drop" || gameObject.GetComponent<Target>().drop == "me_drop") // 대상이 플레이어 일 경우
+     {
+         drop = GameObject.Find(gameObject.GetComponent<Target>().drop);
+     }
+     else // 대상이 몬스터일 경우
+     {
+         string targetTag = gameObject.GetComponent<Target>().drop; // drop 필드에 있는 값이 태그라고 가정
+         drop = GameObject.FindWithTag(Swap(targetTag)); // 해당 태그를 가진 오브젝트를 찾음
+     }
+
+     // drop에 찾은 오브젝트가 있으면 ActivateEffect 호출
+     if (drop != null)
+     {
+         ActivateEffect(drop);
+     }
+     else
+     {
+         Debug.LogError("Drop object not found!");
+         battle.GetComponent<battlemgr>().applycker = false;
+     }
+ }
+
+
+ public void ActivateEffect(GameObject target)
+ {
+     if (target.GetComponent<Target>().opcker == true) //내가 사용한 경우
+     {
+         a = me.GetComponent<PlayerState>().atk + 5;
+     }
+     else //상대가 사용한 경우
+     {
+         a = opp.GetComponent<PlayerState>().atk + 5;
+     }
+
+     // PlayerState 컴포넌트가 있는지 확인
+     PlayerState playerState = target.GetComponent<PlayerState>();
+     if (playerState != null)
+     {
+         // PlayerState가 있을 경우 실행
+         if (playerState.shield > 0)
+         {
+             playerState.shield -= a;
+         }
+         else
+         {
+             playerState.hp -= a;
+         }
+     }
+     else
+     {
+         // PlayerState가 없으면 monstate를 확인
+         monstate monsterState = target.GetComponent<monstate>();
+         if (monsterState != null)
+         {
+             // monstate가 있을 경우 실행
+             if (monsterState.shield > 0)
+             {
+                 monsterState.shield -= a;
+             }
+             else
+             {
+                 monsterState.hp -= a;
+             }
+         }
+         else
+         {
+             Debug.LogError("Target does not have PlayerState or monstate.");
+         }
+     }
+
+     // Canvas 찾기
+     GameObject canvasObject = GameObject.Find("Canvas");
+
+     // 이펙트 로드
+     GameObject CardEffectVFX = Resources.Load<GameObject>("vfx/vfx_1");
+
+     // 타겟의 위치에 VFX 생성
+     Vector3 spawnPosition = target.transform.position;
+     GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+ }
 ```
 
 </details>
 
-#07) 이펙트 예시
+#07) 전투 예시(효과를 적용하기 전 내가 사용한 카드는 오른쪽에 상대가 사용한 카드는 왼쪽에 크게 띄워줌)
 <details>
-<summary>예시 코드</summary>
+<summary>예시</summary>
   
-```csharp
-
- 작성예정
-```
+![TEST_1 2024-10-22 16-46-08](https://github.com/user-attachments/assets/42739d23-c1d8-495a-b950-b1eaa0d97814)
 
 </details>
