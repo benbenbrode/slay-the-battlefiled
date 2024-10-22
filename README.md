@@ -178,6 +178,7 @@ public class Network : MonoBehaviourPunCallbacks
 ```
 
 </details>
+
 #02) 카드의 개수에 따른 시작 각도와 회전 각도 계산하여 부채꼴로 카드 정렬
 <details>
 <summary>예시 코드</summary>
@@ -224,15 +225,11 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#03) 현재 코스트에 따라서 카드 드래그
+#03) 현재 코스트에 따라서 카드 드래그(사용 가능한 카드는 테두리를 초록색으로 표시)
 <details>
-<summary>예시 코드</summary>
+<summary>예시</summary>
   
-```csharp
-
- 작성예정
-```
-
+![TEST_1 2024-10-22 16-12-17](https://github.com/user-attachments/assets/00178606-f064-4e67-97fc-2d66a355ba97)
 </details>
 
 #04) 태그로 적합한 대상인지 확인후 카드를 효과를 적용할 배열로 이동
@@ -241,20 +238,70 @@ public class Network : MonoBehaviourPunCallbacks
   
 ```csharp
 
- 작성예정
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (mgr.GetComponent<CardMgr>().mycurturn == turnstate.battle)
+        {
+            return;
+        }
+
+        dropTarget = eventData.pointerCurrentRaycast.gameObject;
+
+        if (gameObject.CompareTag("attack"))
+        {
+            if (dropTarget != null && dropTarget.tag.Contains("opp"))
+            {
+                me.GetComponent<PlayerState>().cost -= 1; // 코스트 감소
+                transform.Translate(1000f, 0f, 0f); // 화면밖으로 이동
+                activeck = false; // 올바른 타켓에 드롭했는지 알기 위한 변수
+                mgr.GetComponent<CardMgr>().RemoveCard(gameObject); // 손패에서 삭제
+                battlemgr battleManager = FindObjectOfType<battlemgr>();
+                if (dropTarget.GetComponent<PlayerState>() != null) // 대상이 플레이어 였을 경우
+                {
+                    // PlayerState 스크립트를 가지고 있을 때
+                    gameObject.GetComponent<Target>().drop = dropTarget.name;
+                }
+                else if (dropTarget.GetComponent<monstate>() != null)// 대상이 몬스터 였을 경우
+                {
+                    // monstate 스크립트를 가지고 있을 때
+                    gameObject.GetComponent<Target>().drop = dropTarget.tag;
+                }      
+                battleManager.AddToAttack(this.gameObject); // 효과 적용 리스트에 추가
+            }
+        }
+}
 ```
 
 </details>
 
-#05) 배열에 있는 카드를 순서대로 지우며 효과 적용
+#05) 마우스 커서가 올라간 카드가 확대되고 가장 앞에 위치, 커서가 내려가면 기존의 상태로 돌아감
 <details>
 <summary>예시 코드</summary>
   
 ```csharp
 
- 작성예정
-```
+     // 마우스 커서를 올렸을 때 실행되는 함수
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // 이미지 크기를 확대
+        rectTransform.localScale = originalScale * scaleFactor;
 
+        // 원래의 계층 순서를 저장하고, 캔버스에서 가장 앞으로 이동
+        originalSiblingIndex = rectTransform.GetSiblingIndex();
+        rectTransform.SetAsLastSibling();
+    }
+
+    // 마우스 커서가 이미지에서 벗어났을 때 실행되는 함수
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // 이미지 크기를 원래대로 되돌림
+        rectTransform.localScale = originalScale;
+
+        // 원래의 계층 순서로 되돌림
+        rectTransform.SetSiblingIndex(originalSiblingIndex);
+    }
+```
+![TEST_1 2024-10-22 16-28-31](https://github.com/user-attachments/assets/f65e2abf-a3ea-4d98-b5b1-c27af22ba027)
 </details>
 
 #06) 삭제시 효과 적용
@@ -263,18 +310,96 @@ public class Network : MonoBehaviourPunCallbacks
   
 ```csharp
 
- 작성예정
+  void OnDestroy()
+ {
+     if (gameObject.GetComponent<Target>().drop == "opp_drop" || gameObject.GetComponent<Target>().drop == "me_drop") // 대상이 플레이어 일 경우
+     {
+         drop = GameObject.Find(gameObject.GetComponent<Target>().drop);
+     }
+     else // 대상이 몬스터일 경우
+     {
+         string targetTag = gameObject.GetComponent<Target>().drop; // drop 필드에 있는 값이 태그라고 가정
+         drop = GameObject.FindWithTag(Swap(targetTag)); // 해당 태그를 가진 오브젝트를 찾음
+     }
+
+     // drop에 찾은 오브젝트가 있으면 ActivateEffect 호출
+     if (drop != null)
+     {
+         ActivateEffect(drop);
+     }
+     else
+     {
+         Debug.LogError("Drop object not found!");
+         battle.GetComponent<battlemgr>().applycker = false;
+     }
+ }
+
+
+ public void ActivateEffect(GameObject target)
+ {
+     if (target.GetComponent<Target>().opcker == true) //내가 사용한 경우
+     {
+         a = me.GetComponent<PlayerState>().atk + 5;
+     }
+     else //상대가 사용한 경우
+     {
+         a = opp.GetComponent<PlayerState>().atk + 5;
+     }
+
+     // PlayerState 컴포넌트가 있는지 확인
+     PlayerState playerState = target.GetComponent<PlayerState>();
+     if (playerState != null)
+     {
+         // PlayerState가 있을 경우 실행
+         if (playerState.shield > 0)
+         {
+             playerState.shield -= a;
+         }
+         else
+         {
+             playerState.hp -= a;
+         }
+     }
+     else
+     {
+         // PlayerState가 없으면 monstate를 확인
+         monstate monsterState = target.GetComponent<monstate>();
+         if (monsterState != null)
+         {
+             // monstate가 있을 경우 실행
+             if (monsterState.shield > 0)
+             {
+                 monsterState.shield -= a;
+             }
+             else
+             {
+                 monsterState.hp -= a;
+             }
+         }
+         else
+         {
+             Debug.LogError("Target does not have PlayerState or monstate.");
+         }
+     }
+
+     // Canvas 찾기
+     GameObject canvasObject = GameObject.Find("Canvas");
+
+     // 이펙트 로드
+     GameObject CardEffectVFX = Resources.Load<GameObject>("vfx/vfx_1");
+
+     // 타겟의 위치에 VFX 생성
+     Vector3 spawnPosition = target.transform.position;
+     GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+ }
 ```
 
 </details>
 
-#07) 이펙트 예시
+#07) 전투 예시(효과를 적용하기 전 내가 사용한 카드는 오른쪽에 상대가 사용한 카드는 왼쪽에 크게 띄워줌)
 <details>
-<summary>예시 코드</summary>
+<summary>예시</summary>
   
-```csharp
-
- 작성예정
-```
+![TEST_1 2024-10-22 16-46-08](https://github.com/user-attachments/assets/42739d23-c1d8-495a-b950-b1eaa0d97814)
 
 </details>
