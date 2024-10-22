@@ -274,7 +274,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#05) 마우스 커서가 올라간 카드가 확대되고 가장 앞에 위치, 커서가 내려가면 기존의 상태로 돌아감
+#05) OnPointerEnter와 OnPointerExit 메서드를 사용하여 마우스 커서가 올라간 카드가 확대되고 가장 앞에 위치, 커서가 내려가면 기존의 상태로 돌아감
 <details>
 <summary>예시 코드</summary>
   
@@ -304,7 +304,7 @@ public class Network : MonoBehaviourPunCallbacks
 ![TEST_1 2024-10-22 16-28-31](https://github.com/user-attachments/assets/f65e2abf-a3ea-4d98-b5b1-c27af22ba027)
 </details>
 
-#06) 삭제시 효과 적용
+#06) OnDestroy 메서드로 삭제시 효과 적용
 <details>
 <summary>예시 코드</summary>
   
@@ -403,3 +403,17 @@ public class Network : MonoBehaviourPunCallbacks
 ![TEST_1 2024-10-22 16-46-08](https://github.com/user-attachments/assets/42739d23-c1d8-495a-b950-b1eaa0d97814)
 
 </details>
+
+#08) 스폰 카드로 몬스터 객체를 생성하여 전투 보조
+<details>
+<summary>예시</summary>
+  
+![TEST_1 2024-10-22 17-34-43](https://github.com/user-attachments/assets/5f7eb1c7-f9f6-4635-acf4-b94a7e9d6792)
+
+3개의 몬스터 존이 존재, 몬스터 카드 드래그시 몬스터존 활성화, 소환된 몬스터가 파괴될때까지 그 몬스터존 비활성화, 엔드페이즈에 소환된 몬스터들의 효과 적용 
+
+![TEST_1 2024-10-22 17-51-38](https://github.com/user-attachments/assets/bd958188-8d79-4e41-9857-0a64dd7e4c3c)
+
+몬스터는 채력과 방어력을 가지고 있으며 마우스 커서를 올릴시 효과창 활성화
+</details>
+
