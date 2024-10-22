@@ -507,8 +507,5 @@ public class Network : MonoBehaviourPunCallbacks
         }
     }
 ```
-  
-  ![TEST_1 2024-10-22 18-06-18](https://github.com/user-attachments/assets/0dbffcf7-b886-4eec-a7a9-2a24d3f4a002)
-
 </details>
 
