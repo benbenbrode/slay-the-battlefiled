@@ -226,7 +226,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 #03) 현재 코스트에 따라서 카드 드래그
 <details>
-<summary>예시 코드</summary>
+<summary>예시</summary>
   
 ![TEST_1 2024-10-22 16-12-17](https://github.com/user-attachments/assets/00178606-f064-4e67-97fc-2d66a355ba97)
 </details>
@@ -237,20 +237,70 @@ public class Network : MonoBehaviourPunCallbacks
   
 ```csharp
 
- 작성예정
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (mgr.GetComponent<CardMgr>().mycurturn == turnstate.battle)
+        {
+            return;
+        }
+
+        dropTarget = eventData.pointerCurrentRaycast.gameObject;
+
+        if (gameObject.CompareTag("attack"))
+        {
+            if (dropTarget != null && dropTarget.tag.Contains("opp"))
+            {
+                me.GetComponent<PlayerState>().cost -= 1; // 코스트 감소
+                transform.Translate(1000f, 0f, 0f); // 화면밖으로 이동
+                activeck = false; // 올바른 타켓에 드롭했는지 알기 위한 변수
+                mgr.GetComponent<CardMgr>().RemoveCard(gameObject); // 손패에서 삭제
+                battlemgr battleManager = FindObjectOfType<battlemgr>();
+                if (dropTarget.GetComponent<PlayerState>() != null) // 대상이 플레이어 였을 경우
+                {
+                    // PlayerState 스크립트를 가지고 있을 때
+                    gameObject.GetComponent<Target>().drop = dropTarget.name;
+                }
+                else if (dropTarget.GetComponent<monstate>() != null)// 대상이 몬스터 였을 경우
+                {
+                    // monstate 스크립트를 가지고 있을 때
+                    gameObject.GetComponent<Target>().drop = dropTarget.tag;
+                }      
+                battleManager.AddToAttack(this.gameObject); // 효과 적용 리스트에 추가
+            }
+        }
+}
 ```
 
 </details>
 
-#05) 배열에 있는 카드를 순서대로 지우며 효과 적용
+#05) 마우스 커서가 올라간 카드가 확대되고 가장 앞에 위치, 커서가 내려가면 기존의 상태로 돌아감
 <details>
 <summary>예시 코드</summary>
   
 ```csharp
 
- 작성예정
-```
+     // 마우스 커서를 올렸을 때 실행되는 함수
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // 이미지 크기를 확대
+        rectTransform.localScale = originalScale * scaleFactor;
 
+        // 원래의 계층 순서를 저장하고, 캔버스에서 가장 앞으로 이동
+        originalSiblingIndex = rectTransform.GetSiblingIndex();
+        rectTransform.SetAsLastSibling();
+    }
+
+    // 마우스 커서가 이미지에서 벗어났을 때 실행되는 함수
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // 이미지 크기를 원래대로 되돌림
+        rectTransform.localScale = originalScale;
+
+        // 원래의 계층 순서로 되돌림
+        rectTransform.SetSiblingIndex(originalSiblingIndex);
+    }
+```
+![TEST_1 2024-10-22 16-28-31](https://github.com/user-attachments/assets/f65e2abf-a3ea-4d98-b5b1-c27af22ba027)
 </details>
 
 #06) 삭제시 효과 적용
