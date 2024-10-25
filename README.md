@@ -729,3 +729,10 @@ public class Network : MonoBehaviourPunCallbacks
 ![TEST_1 2024-10-25 17-39-38](https://github.com/user-attachments/assets/c2fceb1d-74bd-4fa2-8da8-669f2d78d146)
 무승부
 </details>
+
+#13) 종료, 설정 버튼(슬라이더를 사용한 볼륨조절)
+<details>
+<summary>예시</summary>
+  
+![TEST_1 2024-10-25 18-08-44](https://github.com/user-attachments/assets/921e9b38-f17f-499e-aa91-357d858a31fa)
+</details>
