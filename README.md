@@ -517,30 +517,225 @@ public class Network : MonoBehaviourPunCallbacks
 <summary>예시코드</summary>
   
 ```csharp
-[PunRPC] // 마스터 클라이언트에서 모든 플레이어의 카드 사용이 종료 된걸 확인 후 호출
-public void SpawnCards()
-{
-    photonView.RPC("ReceiveType", RpcTarget.Others, net.GetComponent<Network>().type);
-    if (cardSpawned || deck.Count < 5)
+    // 턴 종료시 드로우 하고 정렬
+    public void DrawCardsAndArrange()
     {
-        for (int i = 0; i < deck.Count; i++)
+        int currentHandCount = HandCard.Length;
+
+        // 덱에 카드가 없는 경우 패배처리
+        if (deck.Count == 0)
         {
-            HandCard[i] = SpawnCard(deck[0]); // deck[0]을 사용하여 가장 앞의 카드 생성
-            deck.RemoveAt(0); // 생성한 카드 제거
+            End(gameObject);
+            return;
         }
+
+        // HandCard가 5장이 될 때까지 덱에서 추가로 카드를 뽑음
+        if (currentHandCount < 5)
+        {
+            int cardsToDraw = 5 - currentHandCount;
+
+            // 덱에 남아있는 카드 수 확인하여 실제로 뽑을 카드 수 결정
+            int actualCardsToDraw = (cardsToDraw < deck.Count) ? cardsToDraw : deck.Count;
+
+            // 현재 HandCard 배열을 새로운 크기로 확장
+            GameObject[] newHandCard = new GameObject[currentHandCount + actualCardsToDraw];
+            for (int i = 0; i < currentHandCount; i++)
+            {
+                newHandCard[i] = HandCard[i];
+            }
+
+            // 부족한 카드만큼 덱에서 뽑아 HandCard에 추가
+            for (int i = 0; i < actualCardsToDraw; i++)
+            {
+                newHandCard[currentHandCount + i] = SpawnCard(deck[0]);
+                deck.RemoveAt(0); // 생성한 카드 제거
+            }
+
+            HandCard = newHandCard;
+        }
+
+        // 부채꼴 형태로 카드 정렬
+        ArrangeCardsInFanShape(HandCard);
     }
-
-    // 5개의 카드 프리팹을 생성하여 배열에 저장합니다.
-    for (int i = 0; i < 5; i++)
-    {
-        HandCard[i] = SpawnCard(deck[0]); // deck[0]을 사용하여 가장 앞의 카드 생성
-        deck.RemoveAt(0); // 생성한 카드 제거
-    }
-
-    ArrangeCardsInFanShape(HandCard); // 부채꼴 형태로 카드 정렬
-
-    cardSpawned = true; // 카드가 생성되었음을 표시
-}
 ```
 
+</details>
+
+#12) 아이콘 처리
+<details>
+<summary>예시코드</summary>
+  
+```csharp
+ void Start()
+ {
+ 
+     itemStatus = new List<int> { 0, 0, 0, 0, 0 }; // 초기 상태 예시
+     UpdateIcons();
+ }
+
+ public void UpdateIcons()
+ {
+     // 기존 아이콘 모두 삭제
+     foreach (GameObject icon in activeIcons)
+     {
+         Destroy(icon);
+     }
+     activeIcons.Clear();
+
+     // itemStatus에 따라 아이콘을 다시 추가
+     for (int i = 0; i < itemStatus.Count; i++)
+     {
+         if (itemStatus[i] == 1) // 값이 1인 경우 공격증가 아이콘
+         {
+             GameObject newIcon = Instantiate(atk, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+         else if (itemStatus[i] == 2) // 값이 2인 경우 민첩성증가 아이콘
+         {
+             GameObject newIcon = Instantiate(ag, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+         else if (itemStatus[i] == 3) // 값이 3인 경우 화염 아이콘
+         {
+             GameObject newIcon = Instantiate(fire, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+         else if (itemStatus[i] == 4)// 값이 3인 경우 독 아이콘
+         {
+             GameObject newIcon = Instantiate(poison, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+     }
+
+     // Horizontal Layout Group이 자동으로 아이콘을 정렬해줌
+ }
+ public void Update()
+ {
+     // atk가 0이 아니고 아직 처리되지 않은 경우 한 번만 실행
+     if (me.GetComponent<PlayerState>().atk != 0 && !atkProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 1); // 해당 요소를 1로 변경
+             lastatkIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         atkProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+     // atk가 0으로 돌아오면 마지막으로 변경된 요소를 다시 0으로 되돌림
+     if (me.GetComponent<PlayerState>().atk == 0 && atkProcessed)
+     {
+         if (lastatkIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastatkIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastatkIndex = -1; // 다시 초기화
+         }
+         atkProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+
+     if (me.GetComponent<PlayerState>().agility != 0 && !agProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 2); // 해당 요소를 1로 변경
+             lastagIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         agProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+     if (me.GetComponent<PlayerState>().agility == 0 && agProcessed)
+     {
+         if (lastagIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastagIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastagIndex = -1; // 다시 초기화
+         }
+         agProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+
+     // fire
+     if (me.GetComponent<PlayerState>().fire != 0 && !fireProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 3); // 해당 요소를 1로 변경
+             lastfireIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         fireProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+
+     if (me.GetComponent<PlayerState>().fire == 0 && fireProcessed)
+     {
+         if (lastfireIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastfireIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastfireIndex = -1; // 다시 초기화
+         }
+         fireProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+
+     // poison
+     if (me.GetComponent<PlayerState>().poison != 0 && !poiProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 4); // 해당 요소를 1로 변경
+             lastpoiIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         poiProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+
+     if (me.GetComponent<PlayerState>().poison == 0 && poiProcessed)
+     {
+         if (lastpoiIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastpoiIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastpoiIndex = -1; // 다시 초기화
+         }
+         poiProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+ }
+
+ // 아이콘 상태를 업데이트하는 메서드
+ public void ChangeItemStatus(int index, int newStatus)
+ {
+     if (index < 0 || index >= itemStatus.Count) return;
+     itemStatus[index] = newStatus;
+     UpdateIcons();
+ }
+
+ int FindFirstZeroIndex()
+ {
+     for (int i = 0; i < itemStatus.Count; i++)
+     {
+         if (itemStatus[i] == 0) // 값이 0인 요소를 찾음
+         {
+             return i; // 해당 인덱스를 반환
+         }
+     }
+     return -1; // 0인 요소가 없으면 -1 반환
+ }
+```
+![TEST_1 2024-10-25 17-19-53](https://github.com/user-attachments/assets/60cb5e2f-27f1-48cb-b44b-89ff11bd7c77)
+</details>
+
+#12) 승리, 패배처리
+<details>
+<summary>예시</summary>
+![TEST_1 2024-10-25 17-31-31](https://github.com/user-attachments/assets/25c1b56b-5aa8-4e42-aaca-62c7c0a6fb22)
+매턴 종료시 나와 상대의 hp를 확인하고 그 캐릭터에 맞는 승리, 패배, 무승부 처리를 한다.
+![image](https://github.com/user-attachments/assets/46054718-0fb2-4606-bf0d-38e7fbce1e9d)
+패배
+![TEST_1 2024-10-25 17-39-38](https://github.com/user-attachments/assets/82cb4762-a210-4284-a814-f0aba37cc4fd)
+무승부
 </details>
