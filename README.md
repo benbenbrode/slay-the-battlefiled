@@ -512,3 +512,35 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
+#11) 턴종료시 손패가 5장이 되도록 뽑는 기능
+<details>
+<summary>예시코드</summary>
+  
+```csharp
+[PunRPC] // 마스터 클라이언트에서 모든 플레이어의 카드 사용이 종료 된걸 확인 후 호출
+public void SpawnCards()
+{
+    photonView.RPC("ReceiveType", RpcTarget.Others, net.GetComponent<Network>().type);
+    if (cardSpawned || deck.Count < 5)
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            HandCard[i] = SpawnCard(deck[0]); // deck[0]을 사용하여 가장 앞의 카드 생성
+            deck.RemoveAt(0); // 생성한 카드 제거
+        }
+    }
+
+    // 5개의 카드 프리팹을 생성하여 배열에 저장합니다.
+    for (int i = 0; i < 5; i++)
+    {
+        HandCard[i] = SpawnCard(deck[0]); // deck[0]을 사용하여 가장 앞의 카드 생성
+        deck.RemoveAt(0); // 생성한 카드 제거
+    }
+
+    ArrangeCardsInFanShape(HandCard); // 부채꼴 형태로 카드 정렬
+
+    cardSpawned = true; // 카드가 생성되었음을 표시
+}
+```
+
+</details>
