@@ -417,20 +417,7 @@ public class Network : MonoBehaviourPunCallbacks
 몬스터는 채력과 방어력을 가지고 있으며 마우스 커서를 올릴시 효과창 활성화
 </details>
 
-#09) 스폰 카드로 몬스터 객체를 생성하여 전투 보조
-<details>
-<summary>예시</summary>
-  
-![TEST_1 2024-10-22 17-34-43](https://github.com/user-attachments/assets/5f7eb1c7-f9f6-4635-acf4-b94a7e9d6792)
-
-3개의 몬스터 존이 존재, 몬스터 카드 드래그시 몬스터존 활성화, 소환된 몬스터가 파괴될때까지 그 몬스터존 비활성화, 엔드페이즈에 소환된 몬스터들의 효과 적용 
-
-![TEST_1 2024-10-22 17-51-38](https://github.com/user-attachments/assets/bd958188-8d79-4e41-9857-0a64dd7e4c3c)
-
-몬스터는 채력과 방어력을 가지고 있으며 마우스 커서를 올릴시 효과창 활성화
-</details>
-
-#10) 스크롤뷰로 덱구축 구현
+#9) 스크롤뷰로 덱구축 구현
 <details>
 <summary>예시코드</summary>
   
@@ -512,7 +499,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#11) 턴종료시 손패가 5장이 되도록 뽑는 기능
+#10) 턴종료시 손패가 5장이 되도록 뽑는 기능
 <details>
 <summary>예시코드</summary>
   
@@ -561,7 +548,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#12) 아이콘 처리
+#11) 아이콘 처리
 <details>
 <summary>예시코드</summary>
   
@@ -732,10 +719,13 @@ public class Network : MonoBehaviourPunCallbacks
 #12) 승리, 패배처리
 <details>
 <summary>예시</summary>
-![TEST_1 2024-10-25 17-31-31](https://github.com/user-attachments/assets/25c1b56b-5aa8-4e42-aaca-62c7c0a6fb22)
-매턴 종료시 나와 상대의 hp를 확인하고 그 캐릭터에 맞는 승리, 패배, 무승부 처리를 한다.
-![image](https://github.com/user-attachments/assets/46054718-0fb2-4606-bf0d-38e7fbce1e9d)
+  
+![TEST_1 2024-10-25 17-31-31](https://github.com/user-attachments/assets/03a1da41-1f7c-46ad-b7ed-5bcccb22e57e)
+승리
+
+![image](https://github.com/user-attachments/assets/44a056eb-9b3b-46b4-9336-6ec82a378830)
 패배
-![TEST_1 2024-10-25 17-39-38](https://github.com/user-attachments/assets/82cb4762-a210-4284-a814-f0aba37cc4fd)
+
+![TEST_1 2024-10-25 17-39-38](https://github.com/user-attachments/assets/c2fceb1d-74bd-4fa2-8da8-669f2d78d146)
 무승부
 </details>
