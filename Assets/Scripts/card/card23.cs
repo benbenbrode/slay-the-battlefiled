@@ -14,12 +14,14 @@ public class card23 : MonoBehaviour
     public GameObject me;
     public GameObject opp;
     public GameObject center;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     private void Start()
     {
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
+        mgr = GameObject.Find("mgr");
         center = GameObject.Find("Canvas/center");
         effTransform = transform.Find("eff");
         effTransform2 = transform.Find("cost_txt");
@@ -112,7 +114,6 @@ public class card23 : MonoBehaviour
                 Destroy(obj);
             }
         }
-
         // Canvas 찾기
         GameObject canvasObject = GameObject.Find("Canvas");
 
@@ -122,6 +123,7 @@ public class card23 : MonoBehaviour
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = center.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(17);
     }
 
     string Swap(string input)

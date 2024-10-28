@@ -56,7 +56,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
     public Sprite swin;
     public Sprite wlose;
     public Sprite slose;
-
+    private bool endcker = false; 
     void Start()
     {
         net = GameObject.Find("netmgr(Clone)");
@@ -148,6 +148,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
                 {
                     drawbg2.GetComponent<Image>().sprite = slose;
                 }
+                endcker = true;
             }
             else if (me.GetComponent<PlayerState>().hp < 1) 
             {
@@ -161,6 +162,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
                 {
                     losebg.GetComponent<Image>().sprite = slose;
                 }
+                endcker = true;
             }
             else if (opp.GetComponent<PlayerState>().hp < 1)
             {
@@ -174,6 +176,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
                 {
                     winbg.GetComponent<Image>().sprite = swin;
                 }
+                endcker = true;
             }
             else if(me.GetComponent<PlayerState>().hp > 0 && opp.GetComponent<PlayerState>().hp > 0 )
             {
@@ -207,6 +210,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
             {
                 drawbg2.GetComponent<Image>().sprite = slose;
             }
+            endcker = true;
         }
         else if (me.GetComponent<PlayerState>().hp < 1)
         {
@@ -220,6 +224,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
             {
                 losebg.GetComponent<Image>().sprite = slose;
             }
+            endcker = true;
         }
         else if (opp.GetComponent<PlayerState>().hp < 1)
         {
@@ -233,6 +238,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
             {
                 winbg.GetComponent<Image>().sprite = swin;
             }
+            endcker = true;
         }
         else if (me.GetComponent<PlayerState>().hp > 0 && opp.GetComponent<PlayerState>().hp > 0)
         {
@@ -250,7 +256,21 @@ public class battlemgr : MonoBehaviourPunCallbacks
         }
         return true; // 모두 true일 때 true 반환
     }
-    
+
+    public void win()
+    {
+        if (endcker == true)
+            return;
+        winpannel.SetActive(true);
+        if (net.GetComponent<Network>().type == 1)
+        {
+            winbg.GetComponent<Image>().sprite = wwin;
+        }
+        else if (net.GetComponent<Network>().type == 2)
+        {
+            winbg.GetComponent<Image>().sprite = swin;
+        }
+    }
     public void deadck()
     {
         if (me.GetComponent<PlayerState>().hp < 1 && opp.GetComponent<PlayerState>().hp < 1)
@@ -636,6 +656,7 @@ public class battlemgr : MonoBehaviourPunCallbacks
     {
         if (!isButtonPressed)
         {
+            mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(1);
             // 버튼 스프라이트 변경
             targetButton.image.sprite = pressedSprite;
             isButtonPressed = true;

@@ -7,17 +7,19 @@ public class card20 : MonoBehaviour
 {
     public GameObject drop;
     public Text eff;
-    private int a = 3;
+    private int a = 4;
 
     public Outline outline; // Outline 컴포넌트
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject battle;
     public GameObject me;
     public GameObject opp;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         battle = GameObject.Find("battlemgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
@@ -27,7 +29,7 @@ public class card20 : MonoBehaviour
         {
             eff = effTransform.GetComponent<Text>();
 
-            eff.text = "적에게 독5부여";
+            eff.text = "적에게 독4부여";
         }
        
         Transform child = transform.Find("cost");
@@ -54,7 +56,7 @@ public class card20 : MonoBehaviour
     }
     void Update()
     {
-        eff.text = "적에게 독5부여";
+        eff.text = "적에게 독4부여";
         if (outline == null)
         {
             return; // Outline 컴포넌트가 없으면 업데이트 하지 않음
@@ -98,6 +100,7 @@ public class card20 : MonoBehaviour
             Debug.LogError("Drop object not found!");
             battle.GetComponent<battlemgr>().applycker = false;
         }
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(16);
     }
 
 
@@ -107,7 +110,7 @@ public class card20 : MonoBehaviour
         PlayerState playerState = target.GetComponent<PlayerState>();
         if (playerState != null)
         {
-            playerState.poison += a;
+            playerState.poison += 4;
         }
 
         // Canvas 찾기

@@ -18,6 +18,7 @@ public class save_btn : MonoBehaviour
 
     void SaveNames()
     {
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(1);
         if (mgr.GetComponent<scrollbtn>().maincker == 0)
         {
             // 기존에 저장된 이름 삭제

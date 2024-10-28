@@ -13,11 +13,13 @@ public class card12 : MonoBehaviour
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject me;
     public GameObject opp;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     public GameObject battle;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
         battle = GameObject.Find("battlemgr");
@@ -108,7 +110,7 @@ public class card12 : MonoBehaviour
         GameObject canvasObject = GameObject.Find("Canvas");
 
         battle.GetComponent<battlemgr>().applycker = false;
-
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(10);
     }
 
     string Swap(string input)

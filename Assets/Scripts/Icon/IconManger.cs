@@ -49,25 +49,25 @@ public class IconManager : MonoBehaviour
         // itemStatus에 따라 아이콘을 다시 추가
         for (int i = 0; i < itemStatus.Count; i++)
         {
-            if (itemStatus[i] == 1) // 값이 1인 경우 기본 아이콘 추가
+            if (itemStatus[i] == 1) // 값이 1인 경우 공격증가 아이콘
             {
                 GameObject newIcon = Instantiate(atk, panel);
                 newIcon.tag = "myicon"; // 태그를 설정합니다.
                 activeIcons.Add(newIcon);
             }
-            else if (itemStatus[i] == 2) // 값이 2인 경우 다른 프리팹 추가
+            else if (itemStatus[i] == 2) // 값이 2인 경우 민첩성증가 아이콘
             {
                 GameObject newIcon = Instantiate(ag, panel);
                 newIcon.tag = "myicon"; // 태그를 설정합니다.
                 activeIcons.Add(newIcon);
             }
-            else if (itemStatus[i] == 3) // 값이 3인 경우 다른 프리팹 추가
+            else if (itemStatus[i] == 3) // 값이 3인 경우 화염 아이콘
             {
                 GameObject newIcon = Instantiate(fire, panel);
                 newIcon.tag = "myicon"; // 태그를 설정합니다.
                 activeIcons.Add(newIcon);
             }
-            else if (itemStatus[i] == 4)// 값이 3인 경우 다른 프리팹 추가
+            else if (itemStatus[i] == 4)// 값이 3인 경우 독 아이콘
             {
                 GameObject newIcon = Instantiate(poison, panel);
                 newIcon.tag = "myicon"; // 태그를 설정합니다.

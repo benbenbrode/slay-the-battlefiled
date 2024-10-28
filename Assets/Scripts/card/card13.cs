@@ -14,10 +14,12 @@ public class card13 : MonoBehaviour
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject me;
     public GameObject opp;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
         effTransform = transform.Find("eff");
@@ -145,6 +147,7 @@ public class card13 : MonoBehaviour
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = target.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(4);
     }
 
     string Swap(string input)

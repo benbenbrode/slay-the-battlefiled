@@ -325,7 +325,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\uC801\uC5D0\uAC8C \uB3C55\uBD80\uC5EC"
+  m_Text: "\uC801\uC5D0\uAC8C \uB3C54\uBD80\uC5EC"
 --- !u!1 &2931800280249547300
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +516,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetScrollView: {fileID: 0}
+  targetScrollView2: {fileID: 0}
+  mgr: {fileID: 0}
   prefab: {fileID: 0}
+  job: 99
 --- !u!114 &-7540962654012330996
 MonoBehaviour:
   m_ObjectHideFlags: 0

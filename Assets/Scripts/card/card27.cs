@@ -16,10 +16,12 @@ public class card27 : MonoBehaviour
     private Transform effTransform2;
     public GameObject opp;
     public GameObject battle;
+    public GameObject mgr;
     private void Start()
     {
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
+        mgr = GameObject.Find("mgr");
         battle = GameObject.Find("battlemgr");
         effTransform = transform.Find("eff");
         effTransform2 = transform.Find("cost_txt");
@@ -118,7 +120,7 @@ public class card27 : MonoBehaviour
         }
 
         battle.GetComponent<battlemgr>().applycker = false;
-
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(4);
     }
 
     string Swap(string input)

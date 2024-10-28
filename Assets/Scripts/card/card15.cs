@@ -15,9 +15,11 @@ public class card15 : MonoBehaviour
     private Transform effTransform;
     private Transform effTransform2;
     public GameObject opp;
+    public GameObject mgr;
     public Vector3 spawnPosition;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
         effTransform = transform.Find("eff");
@@ -125,6 +127,8 @@ public class card15 : MonoBehaviour
         GameObject CardEffectVFX = Resources.Load<GameObject>("vfx/vfx_15");
 
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(12);
     }
 
     string Swap(string input)

@@ -85,10 +85,10 @@ public class CardMgr : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            DrawCardsAndArrange();
-        }
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    DrawCardsAndArrange();
+        //}
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -133,7 +133,11 @@ public class CardMgr : MonoBehaviourPunCallbacks
         photonView.RPC("ReceiveType", RpcTarget.Others, net.GetComponent<Network>().type);
         if (cardSpawned || deck.Count < 5)
         {
-            return;
+            for (int i = 0; i < deck.Count; i++)
+            {
+                HandCard[i] = SpawnCard(deck[0]); // deck[0]을 사용하여 가장 앞의 카드 생성
+                deck.RemoveAt(0); // 생성한 카드 제거
+            }
         }
 
         // 5개의 카드 프리팹을 생성하여 배열에 저장합니다.
@@ -222,25 +226,36 @@ public class CardMgr : MonoBehaviourPunCallbacks
         ArrangeCardsInFanShape(HandCard);
     }
 
-    // E 키를 눌렀을 때 호출되는 메서드
+
+    // 턴 종료시 드로우 하고 정렬
     public void DrawCardsAndArrange()
     {
         int currentHandCount = HandCard.Length;
+
+        // 덱에 카드가 없는 경우
+        if (deck.Count == 0)
+        {
+            Debug.Log("덱에 남은 카드가 없습니다.");
+            return;
+        }
 
         // HandCard가 5장이 될 때까지 덱에서 추가로 카드를 뽑음
         if (currentHandCount < 5)
         {
             int cardsToDraw = 5 - currentHandCount;
 
+            // 덱에 남아있는 카드 수 확인하여 실제로 뽑을 카드 수 결정
+            int actualCardsToDraw = (cardsToDraw < deck.Count) ? cardsToDraw : deck.Count;
+
             // 현재 HandCard 배열을 새로운 크기로 확장
-            GameObject[] newHandCard = new GameObject[5];
+            GameObject[] newHandCard = new GameObject[currentHandCount + actualCardsToDraw];
             for (int i = 0; i < currentHandCount; i++)
             {
                 newHandCard[i] = HandCard[i];
             }
 
             // 부족한 카드만큼 덱에서 뽑아 HandCard에 추가
-            for (int i = 0; i < cardsToDraw; i++)
+            for (int i = 0; i < actualCardsToDraw; i++)
             {
                 newHandCard[currentHandCount + i] = SpawnCard(deck[0]);
                 deck.RemoveAt(0); // 생성한 카드 제거
@@ -249,6 +264,8 @@ public class CardMgr : MonoBehaviourPunCallbacks
             HandCard = newHandCard;
         }
 
-        ArrangeCardsInFanShape(HandCard); // 부채꼴 형태로 카드 정렬
+        // 부채꼴 형태로 카드 정렬
+        ArrangeCardsInFanShape(HandCard);
     }
+
 }

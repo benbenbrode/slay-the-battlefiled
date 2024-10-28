@@ -12,12 +12,14 @@ public class card26 : MonoBehaviour
     public Outline outline; // Outline 컴포넌트
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject me;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     public GameObject opp;
     public Vector3 spawnPosition;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
         effTransform = transform.Find("eff");
@@ -125,6 +127,8 @@ public class card26 : MonoBehaviour
         GameObject CardEffectVFX = Resources.Load<GameObject>("vfx/vfx_26");
 
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(19);
     }
 
     string Swap(string input)

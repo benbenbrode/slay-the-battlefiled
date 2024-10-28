@@ -71,7 +71,7 @@ public class card29vfx : MonoBehaviour
         {
             if (effText != null)
             {
-                effText.text = "자신의 방어도를2올립니다\n";
+                effText.text = "자신의 방어도를\n2올립니다";
             }
         }
     }

@@ -71,7 +71,7 @@ public class card3vfx : MonoBehaviour
         {
             if (effText != null)
             {
-                effText.text = "상대 플레이어에\r\n게 2의 피해를\r\n줍니다\r\n";
+                effText.text = "상대 플레이어에\r\n게 3의 피해를\r\n줍니다\r\n";
             }
         }
     }

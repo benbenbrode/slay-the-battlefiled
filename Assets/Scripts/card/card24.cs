@@ -14,6 +14,7 @@ public class card24 : MonoBehaviour
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject me;
     public GameObject opp;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     private void Start()
@@ -150,6 +151,7 @@ public class card24 : MonoBehaviour
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = target.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(15);
     }
 
     string Swap(string input)

@@ -12,9 +12,10 @@ public class card16 : MonoBehaviour
     public Outline outline; // Outline 컴포넌트
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject me;
-
+    public GameObject mgr;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         me = GameObject.Find("Canvas/me_drop");
         Transform effTransform = transform.Find("eff");
         Transform effTransform2 = transform.Find("cost_txt");
@@ -96,7 +97,7 @@ public class card16 : MonoBehaviour
 
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
         effectInstance.tag = gameObject.GetComponent<Target>().tag;
-
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(2);
 
     }
 
@@ -125,6 +126,7 @@ public class card16 : MonoBehaviour
         {
             effectInstance.tag = "opp_mon3";
         }
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(2);
     }
 
 }

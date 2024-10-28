@@ -15,6 +15,7 @@ public class card10 : MonoBehaviour
     public GameObject battle;
     public GameObject me;
     public GameObject opp;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
 
@@ -22,6 +23,7 @@ public class card10 : MonoBehaviour
     public GameObject postion2;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         battle = GameObject.Find("battlemgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
@@ -163,6 +165,7 @@ public class card10 : MonoBehaviour
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = postion1.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(8);
     }
 
     public void ActivateEffect2(GameObject target2)
@@ -235,6 +238,7 @@ public class card10 : MonoBehaviour
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = postion2.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(8);
     }
 
     string Swap(string input)

@@ -14,7 +14,7 @@ public class deckclick : MonoBehaviour
     public void OnClick()
     {
         ScrollRect parentScrollView = GetComponentInParent<ScrollRect>();
-
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(1);
         if (parentScrollView.name == "bag")
         {
             if (mgr.GetComponent<scrollbtn>().maincker == 0)

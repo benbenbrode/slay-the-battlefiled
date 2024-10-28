@@ -13,10 +13,12 @@ public class card6 : MonoBehaviour
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject battle;
     public GameObject me;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         battle = GameObject.Find("battlemgr");
         me = GameObject.Find("Canvas/me_drop");
         effTransform = transform.Find("eff");
@@ -109,16 +111,16 @@ public class card6 : MonoBehaviour
             playerState.fire += 5;
         }
 
-        Debug.Log("어디가 문제야");
         // Canvas 찾기
         GameObject canvasObject = GameObject.Find("Canvas");
-        Debug.Log("어디가 문제야2");
+
         // 프리팹 로드
         GameObject CardEffectVFX = Resources.Load<GameObject>("vfx/vfx_6");
-        Debug.Log("어디가 문제야3");
+
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = target.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(3);
     }
 
     string Swap(string input)

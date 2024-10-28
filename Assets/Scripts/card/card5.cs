@@ -12,8 +12,10 @@ public class card5 : MonoBehaviour
     public Color glowColor = Color.green; // 테두리가 초록색으로 빛나는 색상
     public GameObject me;
     public GameObject battle;
+    public GameObject mgr;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         me = GameObject.Find("Canvas/me_drop");
         battle = GameObject.Find("battlemgr");
         Transform effTransform = transform.Find("eff");
@@ -79,7 +81,7 @@ public class card5 : MonoBehaviour
         target.GetComponent<PlayerState>().agility += 1;
         Debug.Log("민1업");
 
-
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(5);
         battle.GetComponent<battlemgr>().applycker = false;
 
     }

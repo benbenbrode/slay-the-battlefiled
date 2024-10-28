@@ -136,8 +136,8 @@ public class Network : MonoBehaviourPunCallbacks
     {
         Debug.Log("A player has left the room: " + otherPlayer.NickName);
 
-        // 플레이어가 방을 나가면 다시 방을 "가득 차지 않음"으로 표시
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "IsFull", false } });
+        GameObject end = GameObject.Find("battlemgr");
+        end.GetComponent<battlemgr>().win();
     }
 
     private void OnDestroy()

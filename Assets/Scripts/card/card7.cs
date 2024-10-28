@@ -15,10 +15,12 @@ public class card7 : MonoBehaviour
     public GameObject battle;
     public GameObject me;
     public GameObject opp;
+    public GameObject mgr;
     private Transform effTransform;
     private Transform effTransform2;
     private void Start()
     {
+        mgr = GameObject.Find("mgr");
         battle = GameObject.Find("battlemgr");
         me = GameObject.Find("Canvas/me_drop");
         opp = GameObject.Find("Canvas/opp_drop");
@@ -166,6 +168,7 @@ public class card7 : MonoBehaviour
         // 타겟의 위치에 VFX 생성
         Vector3 spawnPosition = target.transform.position;
         GameObject effectInstance = Instantiate(CardEffectVFX, spawnPosition, Quaternion.identity, canvasObject.transform);
+        mgr.GetComponent<sound_mgr>().PlaySoundBasedOnCondition(3);
     }
 
     string Swap(string input)
