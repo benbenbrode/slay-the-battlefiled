@@ -164,8 +164,8 @@ public class Network : MonoBehaviourPunCallbacks
     {
         Debug.Log("A player has left the room: " + otherPlayer.NickName);
 
-        // 플레이어가 방을 나가면 다시 방을 "가득 차지 않음"으로 표시
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() { { "IsFull", false } });
+        GameObject end = GameObject.Find("battlemgr");
+        end.GetComponent<battlemgr>().win();
     }
 
     private void OnDestroy()
@@ -274,7 +274,7 @@ public class Network : MonoBehaviourPunCallbacks
 
 </details>
 
-#05) 마우스 커서가 올라간 카드가 확대되고 가장 앞에 위치, 커서가 내려가면 기존의 상태로 돌아감
+#05) OnPointerEnter와 OnPointerExit를 사용하여 마우스 커서가 따른 기능 추가
 <details>
 <summary>예시 코드</summary>
   
@@ -304,7 +304,7 @@ public class Network : MonoBehaviourPunCallbacks
 ![TEST_1 2024-10-22 16-28-31](https://github.com/user-attachments/assets/f65e2abf-a3ea-4d98-b5b1-c27af22ba027)
 </details>
 
-#06) 삭제시 효과 적용
+#06) OnDestroy 메서드로 삭제시 효과 적용
 <details>
 <summary>예시 코드</summary>
   
@@ -402,4 +402,337 @@ public class Network : MonoBehaviourPunCallbacks
   
 ![TEST_1 2024-10-22 16-46-08](https://github.com/user-attachments/assets/42739d23-c1d8-495a-b950-b1eaa0d97814)
 
+</details>
+
+#08) 스폰 카드로 몬스터 객체를 생성하여 전투 보조
+<details>
+<summary>예시</summary>
+  
+![TEST_1 2024-10-22 17-34-43](https://github.com/user-attachments/assets/5f7eb1c7-f9f6-4635-acf4-b94a7e9d6792)
+
+3개의 몬스터 존이 존재, 몬스터 카드 드래그시 몬스터존 활성화, 소환된 몬스터가 파괴될때까지 그 몬스터존 비활성화, 엔드페이즈에 소환된 몬스터들의 효과 적용 
+
+![TEST_1 2024-10-22 17-51-38](https://github.com/user-attachments/assets/bd958188-8d79-4e41-9857-0a64dd7e4c3c)
+
+몬스터는 채력과 방어력을 가지고 있으며 마우스 커서를 올릴시 효과창 활성화
+</details>
+
+#9) 스크롤뷰로 덱구축 구현
+<details>
+<summary>예시코드</summary>
+  
+```csharp
+    public void OnClick()
+    {
+        ScrollRect parentScrollView = GetComponentInParent<ScrollRect>();
+
+        if (parentScrollView.name == "bag")
+        {
+            if (mgr.GetComponent<scrollbtn>().maincker == 0)
+            {
+                // 현재 Scroll View의 콘텐츠가 30개 이상인지 확인
+                if (targetScrollView.content.childCount >= 30)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(1);
+                    return;
+                }
+
+                int count = 0;
+                foreach (Transform child in targetScrollView.content)
+                {
+                    if (child.name == prefab.name)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count >= 3)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(2);
+                  
+                    return;
+                }
+
+                // 새로운 프리팹을 특정 Scroll View의 Content에 추가합니다.
+                GameObject newItem = Instantiate(prefab, targetScrollView.content);
+                newItem.transform.localScale = Vector3.one;
+                newItem.name = prefab.name;
+            }
+            else if(mgr.GetComponent<scrollbtn>().maincker == 1)
+            {
+                // 현재 Scroll View의 콘텐츠가 30개 이상인지 확인
+                if (targetScrollView2.content.childCount >= 30)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(1);
+                    return;
+                }
+
+                int count = 0;
+                foreach (Transform child in targetScrollView2.content)
+                {
+                    if (child.name == prefab.name)
+                    {
+                        count++;
+                    }
+                }
+
+                if (count >= 3)
+                {
+                    mgr.GetComponent<textmanger>().ShowTextWithDelay(2);
+                    return;
+                }
+
+                // 새로운 프리팹을 특정 Scroll View의 Content에 추가합니다.
+                GameObject newItem = Instantiate(prefab, targetScrollView2.content);
+                newItem.transform.localScale = Vector3.one;
+                newItem.name = prefab.name;
+            }
+        }
+        else if (parentScrollView.name == "deck" || parentScrollView.name == "deck2")
+        {
+            Destroy(gameObject);
+        }
+    }
+```
+
+![TEST_1 2024-10-22 18-06-18 (1)](https://github.com/user-attachments/assets/3bbfaaa8-48b5-465d-8a51-da2bd6b04912)
+
+</details>
+
+#10) 턴종료시 손패가 5장이 되도록 뽑는 기능
+<details>
+<summary>예시코드</summary>
+  
+```csharp
+    // 턴 종료시 드로우 하고 정렬
+    public void DrawCardsAndArrange()
+    {
+        int currentHandCount = HandCard.Length;
+
+        // 덱에 카드가 없는 경우 패배처리
+        if (deck.Count == 0)
+        {
+            End(gameObject);
+            return;
+        }
+
+        // HandCard가 5장이 될 때까지 덱에서 추가로 카드를 뽑음
+        if (currentHandCount < 5)
+        {
+            int cardsToDraw = 5 - currentHandCount;
+
+            // 덱에 남아있는 카드 수 확인하여 실제로 뽑을 카드 수 결정
+            int actualCardsToDraw = (cardsToDraw < deck.Count) ? cardsToDraw : deck.Count;
+
+            // 현재 HandCard 배열을 새로운 크기로 확장
+            GameObject[] newHandCard = new GameObject[currentHandCount + actualCardsToDraw];
+            for (int i = 0; i < currentHandCount; i++)
+            {
+                newHandCard[i] = HandCard[i];
+            }
+
+            // 부족한 카드만큼 덱에서 뽑아 HandCard에 추가
+            for (int i = 0; i < actualCardsToDraw; i++)
+            {
+                newHandCard[currentHandCount + i] = SpawnCard(deck[0]);
+                deck.RemoveAt(0); // 생성한 카드 제거
+            }
+
+            HandCard = newHandCard;
+        }
+
+        // 부채꼴 형태로 카드 정렬
+        ArrangeCardsInFanShape(HandCard);
+    }
+```
+
+</details>
+
+#11) 아이콘 처리
+<details>
+<summary>예시코드</summary>
+  
+```csharp
+ void Start()
+ {
+ 
+     itemStatus = new List<int> { 0, 0, 0, 0, 0 }; // 초기 상태 예시
+     UpdateIcons();
+ }
+
+ public void UpdateIcons()
+ {
+     // 기존 아이콘 모두 삭제
+     foreach (GameObject icon in activeIcons)
+     {
+         Destroy(icon);
+     }
+     activeIcons.Clear();
+
+     // itemStatus에 따라 아이콘을 다시 추가
+     for (int i = 0; i < itemStatus.Count; i++)
+     {
+         if (itemStatus[i] == 1) // 값이 1인 경우 공격증가 아이콘
+         {
+             GameObject newIcon = Instantiate(atk, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+         else if (itemStatus[i] == 2) // 값이 2인 경우 민첩성증가 아이콘
+         {
+             GameObject newIcon = Instantiate(ag, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+         else if (itemStatus[i] == 3) // 값이 3인 경우 화염 아이콘
+         {
+             GameObject newIcon = Instantiate(fire, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+         else if (itemStatus[i] == 4)// 값이 3인 경우 독 아이콘
+         {
+             GameObject newIcon = Instantiate(poison, panel);
+             newIcon.tag = "myicon"; // 태그를 설정합니다.
+             activeIcons.Add(newIcon);
+         }
+     }
+
+     // Horizontal Layout Group이 자동으로 아이콘을 정렬해줌
+ }
+ public void Update()
+ {
+     // atk가 0이 아니고 아직 처리되지 않은 경우 한 번만 실행
+     if (me.GetComponent<PlayerState>().atk != 0 && !atkProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 1); // 해당 요소를 1로 변경
+             lastatkIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         atkProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+     // atk가 0으로 돌아오면 마지막으로 변경된 요소를 다시 0으로 되돌림
+     if (me.GetComponent<PlayerState>().atk == 0 && atkProcessed)
+     {
+         if (lastatkIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastatkIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastatkIndex = -1; // 다시 초기화
+         }
+         atkProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+
+     if (me.GetComponent<PlayerState>().agility != 0 && !agProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 2); // 해당 요소를 1로 변경
+             lastagIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         agProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+     if (me.GetComponent<PlayerState>().agility == 0 && agProcessed)
+     {
+         if (lastagIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastagIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastagIndex = -1; // 다시 초기화
+         }
+         agProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+
+     // fire
+     if (me.GetComponent<PlayerState>().fire != 0 && !fireProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 3); // 해당 요소를 1로 변경
+             lastfireIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         fireProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+
+     if (me.GetComponent<PlayerState>().fire == 0 && fireProcessed)
+     {
+         if (lastfireIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastfireIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastfireIndex = -1; // 다시 초기화
+         }
+         fireProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+
+     // poison
+     if (me.GetComponent<PlayerState>().poison != 0 && !poiProcessed)
+     {
+         int firstZeroIndex = FindFirstZeroIndex();
+         if (firstZeroIndex != -1) // 0인 요소가 있으면
+         {
+             ChangeItemStatus(firstZeroIndex, 4); // 해당 요소를 1로 변경
+             lastpoiIndex = firstZeroIndex; // 마지막에 변경된 인덱스 기록
+         }
+         poiProcessed = true; // 실행 후 다시 실행되지 않도록 설정
+     }
+
+
+     if (me.GetComponent<PlayerState>().poison == 0 && poiProcessed)
+     {
+         if (lastpoiIndex != -1) // 유효한 인덱스가 있는 경우
+         {
+             ChangeItemStatus(lastpoiIndex, 0); // 해당 요소를 다시 0으로 변경
+             lastpoiIndex = -1; // 다시 초기화
+         }
+         poiProcessed = false; // 다시 처리할 수 있도록 설정
+     }
+ }
+
+ // 아이콘 상태를 업데이트하는 메서드
+ public void ChangeItemStatus(int index, int newStatus)
+ {
+     if (index < 0 || index >= itemStatus.Count) return;
+     itemStatus[index] = newStatus;
+     UpdateIcons();
+ }
+
+ int FindFirstZeroIndex()
+ {
+     for (int i = 0; i < itemStatus.Count; i++)
+     {
+         if (itemStatus[i] == 0) // 값이 0인 요소를 찾음
+         {
+             return i; // 해당 인덱스를 반환
+         }
+     }
+     return -1; // 0인 요소가 없으면 -1 반환
+ }
+```
+![TEST_1 2024-10-25 17-19-53](https://github.com/user-attachments/assets/60cb5e2f-27f1-48cb-b44b-89ff11bd7c77)
+</details>
+
+#12) 승리, 패배처리
+<details>
+<summary>예시</summary>
+  
+![TEST_1 2024-10-25 17-31-31](https://github.com/user-attachments/assets/03a1da41-1f7c-46ad-b7ed-5bcccb22e57e)
+승리
+
+![image](https://github.com/user-attachments/assets/44a056eb-9b3b-46b4-9336-6ec82a378830)
+패배
+
+![TEST_1 2024-10-25 17-39-38](https://github.com/user-attachments/assets/c2fceb1d-74bd-4fa2-8da8-669f2d78d146)
+무승부
+</details>
+
+#13) 종료, 설정 버튼(슬라이더를 사용한 볼륨조절)
+<details>
+<summary>예시</summary>
+  
+![TEST_1 2024-10-25 18-08-44](https://github.com/user-attachments/assets/921e9b38-f17f-499e-aa91-357d858a31fa)
 </details>
