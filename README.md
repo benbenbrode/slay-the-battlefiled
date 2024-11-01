@@ -19,6 +19,9 @@
 사용 엔진 : UNITY 2022.3.15f1
 ---
 
+시연 영상 : https://www.youtube.com/watch?v=fT_4HDiQwJ8
+---
+
 주요 활용 기술
 ---
 #01) 포톤 네트워크를 이용한 랜덤매칭 시스템 구현
